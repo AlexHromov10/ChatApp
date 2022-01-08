@@ -1,72 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import configData from "../../config.json";
 
+const useInput = (initValue) => {
+  const [value, setValue] = useState(initValue);
+  const [isDirty, setDirty] = useState(false);
+
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const onBlur = (e) => {
+    setDirty(true);
+  };
+
+  return {
+    value,
+    onChange,
+    onBlur,
+  };
+};
+
 const RegistrationPage = () => {
-  const [email, setEmail] = useState("");
-  const [emailFilled, setEmailFilled] = useState(false);
-  const [emailError, setEmailError] = useState(
-    "Поле для e-mail не можеты быть пустым!"
-  );
-
-  const checkEmail = async (e) => {
-    try {
-      const response = await fetch(configData.SERVER_URL + "/auth/checkemail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: e.target.value }),
-      });
-      const jsonData = await response.json();
-      if (!jsonData["check email"]) {
-        setEmailError("E-mail уже занят!");
-      } else {
-        setEmailError("");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const emailHandler = (e) => {
-    setEmail(e.target.value);
-    const emailRegex =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (!emailRegex.test(String(e.target.value).toLowerCase().trim())) {
-      setEmailError("Некорректный e-mail!");
-    } else {
-      setEmailError("");
-    }
-  };
-
-  const blurHandler = (e) => {
-    switch (e.target.name) {
-      case "email":
-        setEmailFilled(true);
-        checkEmail(e);
-        break;
-
-      default:
-        break;
-    }
-  };
+  const email = useInput("");
+  const password = useInput("");
 
   return (
     <div>
       <h1>Регистрация</h1>
-      <form>
-        <label for="email">Логин (E-mail адрес):</label>
-        <input
-          name="email"
-          type="text"
-          value={email}
-          onBlur={(e) => blurHandler(e)}
-          onChange={(e) => emailHandler(e)}
-          placeholder="Введите e-mail"
-        ></input>
-        {emailFilled && emailError && (
-          <span style={{ color: "red" }}>{emailError}</span>
-        )}
+      <form className="registration-form">
+        <div className="registration-form-group">
+          <label for="email">Логин (E-mail адрес):</label>
+          <input
+            className="input-text"
+            onChange={email.onChange}
+            value={email.value}
+            name="email"
+            type="text"
+          ></input>
+        </div>
+        <div className="registration-form-group">
+          <label for="password">Пароль:</label>
+          <input
+            className="input-text"
+            onChange={password.onChange}
+            value={password.value}
+            name="password"
+            type="text"
+          ></input>
+        </div>
+        <div className="registration-form-group">
+          <label for="first_name">Имя:</label>
+          <input className="input-text" name="first_name" type="text"></input>
+        </div>
+        <div className="registration-form-group">
+          <label for="last_name">Фамилия:</label>
+          <input className="input-text" name="last_name" type="text"></input>
+        </div>
+        <div className="registration-form-group">
+          <label for="birth_date">Дата рождения:</label>
+          <input
+            className="input-date"
+            name="birth_date"
+            type="date"
+            max={new Date().toLocaleDateString("en-ca")}
+          ></input>
+        </div>
       </form>
     </div>
   );

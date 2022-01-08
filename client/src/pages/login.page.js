@@ -5,7 +5,7 @@ const LoginPage = () => {
     <div>
       <p>Login</p>
       <input type="text" placeholder="EMAIL"></input>
-      <p>Нет аккаунта? зарегись:</p>
+      <p>Нет аккаунта? зарегись: </p>
       <Link to="/registration">Регистрация</Link>
     </div>
   );
