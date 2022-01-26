@@ -1,21 +1,55 @@
 var express = require("express");
 var router = express.Router();
 const chatControllers = require("../controllers/chat.controllers");
+const verifyJwt = require("../controllers/verifyJwt");
+const authControllers = require("../controllers/auth.controllers");
 
 // Пример: ~/chat/create
 // Создать чат
-router.post("/create", chatControllers.createChat);
+router.post(
+  "/create",
+  verifyJwt,
+  chatControllers.createChat,
+  chatControllers.addUserToChat
+);
 
 // Удалить чат
-router.delete("/delete/:chat_id", chatControllers.deleteChat);
+router.post(
+  "/delete",
+  verifyJwt,
+  chatControllers.isExistingChat,
+  chatControllers.isMemberOfChat,
+  chatControllers.isAdminInChat,
+  chatControllers.deleteChat
+);
 
 // Добавить пользователя в чат
-router.post("/adduser", chatControllers.addUserToChat);
+router.post(
+  "/adduser",
+  verifyJwt,
+  chatControllers.isExistingChat,
+  chatControllers.isMemberOfChat,
+  chatControllers.addUserToChat
+);
 
 // Предоставить статус админа
-router.put("/grantadminstatus", chatControllers.grantAdminStatus);
+router.post(
+  "/grantadminstatus",
+  verifyJwt,
+  chatControllers.isExistingChat,
+  chatControllers.isMemberOfChat,
+  chatControllers.isAdminInChat,
+  chatControllers.grantAdminStatus
+);
 
 // Удалить пользователя из чата
-router.delete("/deleteuser", chatControllers.deleteUserFromChat);
+router.post(
+  "/deleteuser",
+  verifyJwt,
+  chatControllers.isExistingChat,
+  chatControllers.isMemberOfChat,
+  chatControllers.isAdminInChat,
+  chatControllers.deleteUserFromChat
+);
 
 module.exports = router;

@@ -8,4 +8,18 @@ const pool = new Pool({
   database: process.env.dbName,
 });
 
-module.exports = pool;
+function dbErrorsHandling(errorCode) {
+  switch (errorCode) {
+    case process.env.postgres_unique_violation:
+      console.log("ERROR CODE:" + errorCode);
+      return { errorCode: errorCode, message: "The PK value isn't unique!" };
+    case process.env.foreign_key_violation:
+      console.log("ERROR CODE:" + errorCode);
+      return { errorCode: errorCode, message: "The FK does not exists!" };
+    default:
+      console.log("ERROR CODE:" + errorCode);
+      return { errorCode: errorCode, message: "UNHANDLED DB ERROR" };
+  }
+}
+
+module.exports = { pool, dbErrorsHandling };

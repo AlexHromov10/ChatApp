@@ -40,6 +40,7 @@ const RegistrationPage = () => {
   const emailHandler = (e) => {
     setEmail(e.target.value);
     const emailRegex =
+      // eslint-disable-next-line no-useless-escape
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     if (!emailRegex.test(String(e.target.value).toLowerCase().trim())) {
       setEmailError("Некорректный e-mail!");

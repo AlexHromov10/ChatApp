@@ -1,11 +1,69 @@
-const pool = require("../db");
+const { pool, dbErrorsHandling } = require("../db");
 const bcrypt = require("bcrypt"); // bcrypt
 const crypto = require("crypto");
-const { validationResult } = require("express-validator/check");
 require("dotenv").config();
-const saltRounds = 10; // data processing time
 const { role_user } = require("../constants/role.constants");
+const { validationResult } = require("express-validator/check");
+const jwt = require("jsonwebtoken");
 
+const saltRounds = 10; // data processing time
+
+////////// MIDDLEWARE:
+//Проверка EMAIL
+const emailExists = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const responseEmailExists = await pool.query(
+      "SELECT COUNT(*) FROM users WHERE email=$1",
+      [email]
+    );
+    if (responseEmailExists.rows[0].count != 0) {
+      return res.status(400).send("This e-mail is already taken!");
+    }
+
+    next();
+  } catch (error) {
+    return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
+  }
+};
+
+const nicknameExists = async (req, res, next) => {
+  try {
+    const { nickname } = req.body;
+    const responseEmailExists = await pool.query(
+      "SELECT COUNT(*) FROM users WHERE nickname=$1",
+      [nickname]
+    );
+    if (responseEmailExists.rows[0].count != 0) {
+      return res.status(400).send("This nickname is already taken!");
+    }
+
+    next();
+  } catch (error) {
+    return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
+  }
+};
+
+const userIdExists = async (req, res, next) => {
+  try {
+    const { user_id } = req.body;
+    const responseUserIdExists = await pool.query(
+      "SELECT COUNT(*) FROM users WHERE id=$1",
+      [user_id]
+    );
+    if (responseUserIdExists.rows[0].count != 0) {
+      return res.status(400).send("This e-mail is already taken!");
+    }
+
+    next();
+  } catch (error) {
+    return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
+  }
+};
+
+////////////////////////////////////////////////////
+
+////////// ENDPOINTS:
 // РЕГИСТРАЦИЯ
 const register = async (req, res) => {
   const errors = validationResult(req);
@@ -13,69 +71,74 @@ const register = async (req, res) => {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  try {
-    const { email, password, first_name, last_name, birth_date } = req.body;
-    bcrypt.hash(password, saltRounds).then(async function (hash) {
-      const user_id = crypto.randomBytes(16).toString("hex");
-      const role = role_user;
-      const created_at = new Date();
-      const responseRegister = await pool.query(
-        "INSERT INTO users (id,email,password,role,first_name, last_name, birth_date,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
-        [
-          user_id,
-          email,
-          hash,
-          role,
-          first_name,
-          last_name,
-          birth_date,
-          created_at,
-        ]
-      );
-      res.json(responseRegister);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const { email, password, nickname, birth_date } = req.body;
 
-//Проверка EMAIL
-const checkEmail = async (req, res) => {
   try {
-    const { email } = req.body;
+    const hash = await bcrypt.hash(password, saltRounds);
+
+    const user_id = crypto.randomBytes(16).toString("hex");
+    const role = role_user;
+    const created_at = new Date();
+
     const responseRegister = await pool.query(
-      "SELECT COUNT(*) FROM users WHERE email=$1",
-      [email]
+      "INSERT INTO users (id,email,password,role,nickname, birth_date,created_at) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *",
+      [user_id, email, hash, role, nickname, birth_date, created_at]
     );
-    if (responseRegister.rows[0].count == 0) {
-      res.json({ "check email": true });
-    } else {
-      res.json({ "check email": false });
-    }
+    return res.status(200).send("Succesful registration!");
   } catch (error) {
-    console.log(error);
+    return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
   }
 };
 
 // ЛОГИН
 const login = async (req, res) => {
-  try {
-    const { username, password } = req.body;
+  // Валдиация
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
 
-    res.json({ username, password });
+  // Проверка данных в БД
+  try {
+    const { email, password } = req.body;
+    const responseLogin = await pool.query(
+      "SELECT * FROM users WHERE email=$1",
+      [email]
+    );
+
+    // Проверка на email
+    if (responseLogin.rowCount === 0) {
+      return res.status(400).json({ errors: "Wrong email!" });
+    }
+
+    // Проверка пароля
+    const validPassword = await bcrypt.compare(
+      password,
+      responseLogin.rows[0].password
+    );
+    if (!validPassword) {
+      return res.status(400).json({ errors: "Wrong password!" });
+    }
+
+    // Создать и присвоить JWT
+    // В Header поле "auth-token" - там сам токен JWT
+    // ID пользователя - в req.user.id
+    const token = jwt.sign(
+      { id: responseLogin.rows[0].id },
+      process.env.TOKEN_SECRET
+    );
+    res.header("auth-token", token).status(200).send("Succesful login!");
   } catch (error) {
-    console.log(error);
+    return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
   }
 };
 
 //////
 
-function validateRegistrationInfo(request) {
-  const { email, password, first_name, last_name, birth_date } = request.body;
-}
-
 module.exports = {
   register,
-  checkEmail,
+  emailExists,
+  nicknameExists,
+  userIdExists,
   login,
 };
