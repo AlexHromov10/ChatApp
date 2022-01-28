@@ -14,31 +14,30 @@ body {
   margin: 0;
   //background: linear-gradient(287.31deg, rgba(128, 0, 255, 0.65) 0.36%, rgba(0, 71, 255, 0.62) 100%);
   //background: linear-gradient(287.31deg, #00c2ff 0.36%, #0543ba 29.94%, #400bb1 63.27%, #9e00ff 99.05%);
-  background: linear-gradient(287.31deg, rgba(0, 194, 255, 0.76) 0.36%, rgba(5, 67, 186, 0.72) 29.94%, rgba(64, 11, 177, 0.74) 63.27%, rgba(158, 0, 255, 0.69) 99.05%);
+  // background: linear-gradient(
+  //   0deg,
+  //   rgba(0, 194, 255, 0.76) 0.36%,
+  //   rgba(5, 67, 186, 0.72) 29.94%,
+  //   rgba(64, 11, 177, 0.74) 63.27%,
+  //   rgba(158, 0, 255, 0.69) 99.05%
+  // );
+
+  background: linear-gradient(287.31deg, #4b066b 0.36%, #093385 100%);
   @include text;
 }
 
 @mixin input {
   @include text;
   margin-bottom: 0.6em;
-  color: rgb(43, 43, 43);
+  //color: rgb(43, 43, 43);
   box-sizing: border-box;
   outline: none;
-  border: solid 1px;
-  border-color: grey;
-  border-radius: 5px;
+
   height: 40px;
-  background-color: rgb(255, 255, 255);
-  transition: background-color 0.2s;
-  &:hover {
-    background-color: rgb(216, 216, 216);
-  }
-  /*
-  &:focus {
-    background-color: rgb(219, 219, 219);
-    box-shadow: 0px 0px 2px 3px rgb(255, 255, 255);
-  }
-  */
+  background-color: rgba(255, 255, 255, 0);
+  padding: 0px;
+  border: 1px rgb(255, 255, 255);
+  border-bottom-style: solid;
 }
 .registration {
   display: flex;
@@ -48,17 +47,17 @@ body {
   margin-bottom: auto;
 
   .form {
-    background-color: rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.54);
+    background-color: rgba(136, 136, 136, 0.151);
+    box-shadow: 0px 0px 0px 0px rgba(51, 51, 51, 0.54);
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 20px;
+    //border-radius: 20px;
     width: 600px;
-    transition: box-shadow 0.4s ease-in-out;
-    &:hover {
-      box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.34);
-    }
+    transition: box-shadow 0.2s ease-in-out;
+    // &:hover {
+    //   box-shadow: 10px 10px 2px 0px rgba(51, 51, 51, 0.54);
+    // }
 
     h1 {
       font-weight: 400;
@@ -71,21 +70,25 @@ body {
       margin-bottom: 10px;
 
       span {
+        display: inline-flexbox;
+        //max-width: 150px;
         margin: 0;
-        color: rgb(255, 73, 73);
+        color: rgb(214, 42, 42);
         font-size: 20px;
       }
 
       label {
-        display: inline-block;
-        margin-bottom: 7px;
+        // max-width: 150px;
+        display: inline-flexbox;
+        margin-bottom: 3px;
       }
 
       input {
         @include input;
       }
       ::placeholder {
-        opacity: 0.7;
+        font-weight: 100;
+        color: rgba(255, 255, 255, 0.541);
       }
 
       .form-group-date {
@@ -95,11 +98,50 @@ body {
         select {
           width: 150px;
           @include input;
+          //outline: solid 1px;
+          //border-radius: 7px;
+          outline: none;
+          option {
+            font-size: 16px;
+            color: black;
+            background-color: rgba(219, 219, 219, 0.493);
+          }
         }
+        .error_input {
+          transition: background-color 0.2s linear;
+          background-color: rgba(214, 42, 42, 0.164);
+          border-color: rgb(214, 42, 42);
+        }
+      }
+
+      .form-group--label-error {
+        flex-direction: row;
+        display: flex;
+        justify-content: space-between;
+      }
+      .error_input {
+        transition: background-color 0.2s linear;
+        background-color: rgba(214, 42, 42, 0.164);
+        border-color: rgb(214, 42, 42);
       }
 
       button {
         @include input;
+        height: 80px;
+        font-size: 25px;
+        border: solid 1px;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.212);
+        transition: all 0.2s linear;
+        cursor: pointer;
+        &:disabled {
+          color: rgb(194, 194, 194);
+          border: solid 1px;
+          border-radius: 5px;
+          border-color: rgba(165, 164, 164, 0.11);
+          background-color: rgba(165, 164, 164, 0.11);
+          cursor: default;
+        }
       }
     }
   }

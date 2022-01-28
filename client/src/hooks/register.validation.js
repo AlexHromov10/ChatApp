@@ -9,20 +9,22 @@ const useValidation = (value, validations) => {
   const [isEmpty, setEmpty] = useState(true);
   const [minLengthError, setMinLengthError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [selectError, setSelectError] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState({
     isEmpty: "",
     minLength: "",
     isEmail: "",
+    selError: "",
   });
 
   useEffect(() => {
-    if (isEmpty || minLengthError || emailError) {
+    if (isEmpty || minLengthError || emailError || selectError) {
       setInputValid(false);
     } else {
       setInputValid(true);
     }
-  }, [isEmpty, minLengthError, emailError]);
+  }, [isEmpty, minLengthError, emailError, selectError]);
 
   useEffect(() => {
     const emailRegex =
@@ -41,7 +43,7 @@ const useValidation = (value, validations) => {
             setEmpty(true);
             setErrorMessage((errorMessage) => ({
               ...errorMessage,
-              isEmpty: "Поле не должно быть пустым!",
+              isEmpty: "Данное поле не должно быть пустым",
             }));
           }
           break;
@@ -67,13 +69,30 @@ const useValidation = (value, validations) => {
             setEmailError(true);
             setErrorMessage((errorMessage) => ({
               ...errorMessage,
-              isEmail: "Некорректный e-mail!",
+              isEmail: "Некорректный e-mail",
             }));
           } else {
             setEmailError(false);
             setErrorMessage((errorMessage) => ({
               ...errorMessage,
               isEmail: "",
+            }));
+          }
+          break;
+
+        case "selectDefaultError":
+          if (value === "NONE") {
+            setSelectError(true);
+            setErrorMessage((errorMessage) => ({
+              ...errorMessage,
+              selError: "Некорректная дата",
+            }));
+          } else {
+            setSelectError(false);
+
+            setErrorMessage((errorMessage) => ({
+              ...errorMessage,
+              selError: "",
             }));
           }
           break;
@@ -90,6 +109,7 @@ const useValidation = (value, validations) => {
     isEmpty,
     emailError,
     minLengthError,
+    selectError,
     errorMessage,
   };
 };
@@ -108,11 +128,18 @@ const useInput = (initValue, validations) => {
     setDirty(true);
   };
 
+  const onClickSelector = (e) => {
+    setDirty(true);
+    setValue(e.target.value);
+    //console.log("Clicked. " + e.target.value + ". isDirty: " + isDirty);
+  };
+
   return {
     value,
     onChange,
     onBlur,
     isDirty,
+    onClickSelector,
     ...valid,
   };
 };
