@@ -16,9 +16,7 @@ app.use("/messages", messages);
 // СТАРТ //
 const start = () => {
   try {
-    app.listen(process.env.serverPORT, () =>
-      console.log(`Started on port ${process.env.serverPORT}`)
-    );
+    app.listen(process.env.serverPORT, () => console.log(`Started on port ${process.env.serverPORT}`));
   } catch (error) {
     console.log(error);
   }

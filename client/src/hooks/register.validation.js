@@ -1,35 +1,52 @@
 import { useEffect, useState } from "react";
+import configData from "../config.json";
 
 // Валидация полей при регистрации (или не только при ней...)
 // В useInput поступает изначальное значение поля и обьекты валидации (например: {isEmpty:true})
 
-const useValidation = (value, validations) => {
+const useValidation = (value, isDirty, validations) => {
   const [inputValid, setInputValid] = useState(false);
 
   const [isEmpty, setEmpty] = useState(true);
   const [minLengthError, setMinLengthError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [selectError, setSelectError] = useState(false);
+  const [isTaken, setIsTaken] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState({
     isEmpty: "",
     minLength: "",
     isEmail: "",
     selError: "",
+    isTakenError: "",
   });
 
   useEffect(() => {
-    if (isEmpty || minLengthError || emailError || selectError) {
+    if (isEmpty || minLengthError || emailError || selectError || isTaken) {
       setInputValid(false);
     } else {
       setInputValid(true);
     }
-  }, [isEmpty, minLengthError, emailError, selectError]);
+  }, [isEmpty, minLengthError, emailError, selectError, isTaken]);
 
   useEffect(() => {
     const emailRegex =
       // eslint-disable-next-line no-useless-escape
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{1,})$/i;
+
+    const fetchIsTaken = async (url, fieldToCheck, value) => {
+      const data = { [fieldToCheck]: value };
+
+      const response = await fetch(configData.SERVER_URL + url /* "/auth/checkemail" */, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      return await response.json();
+    };
+
     for (const validation in validations) {
       switch (validation) {
         case "isEmpty":
@@ -89,11 +106,40 @@ const useValidation = (value, validations) => {
             }));
           } else {
             setSelectError(false);
-
             setErrorMessage((errorMessage) => ({
               ...errorMessage,
               selError: "",
             }));
+          }
+          break;
+
+        case "isTaken":
+          setIsTaken(true);
+          if (!emailError && !minLengthError) {
+            (async () => {
+              try {
+                const jsonData = await fetchIsTaken(
+                  validations[validation].url,
+                  validations[validation].fieldToCheck,
+                  value
+                );
+                if (jsonData["success"]) {
+                  setIsTaken(false);
+                  setErrorMessage((errorMessage) => ({
+                    ...errorMessage,
+                    isTakenError: "",
+                  }));
+                } else {
+                  setIsTaken(true);
+                  setErrorMessage((errorMessage) => ({
+                    ...errorMessage,
+                    isTakenError: "Занято!",
+                  }));
+                }
+              } catch (error) {
+                console.log(error);
+              }
+            })();
           }
           break;
 
@@ -102,7 +148,9 @@ const useValidation = (value, validations) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [value, isDirty]);
+
+  useEffect(() => {}, []);
 
   return {
     inputValid,
@@ -110,6 +158,7 @@ const useValidation = (value, validations) => {
     emailError,
     minLengthError,
     selectError,
+    isTaken,
     errorMessage,
   };
 };
@@ -118,7 +167,7 @@ const useInput = (initValue, validations) => {
   const [value, setValue] = useState(initValue);
   const [isDirty, setDirty] = useState(false);
 
-  const valid = useValidation(value, validations);
+  const valid = useValidation(value, isDirty, validations);
 
   const onChange = (e) => {
     setValue(e.target.value);
@@ -131,7 +180,6 @@ const useInput = (initValue, validations) => {
   const onClickSelector = (e) => {
     setDirty(true);
     setValue(e.target.value);
-    //console.log("Clicked. " + e.target.value + ". isDirty: " + isDirty);
   };
 
   return {

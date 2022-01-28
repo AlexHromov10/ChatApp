@@ -13,14 +13,22 @@ const saltRounds = 10; // data processing time
 const emailExists = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const responseEmailExists = await pool.query(
-      "SELECT COUNT(*) FROM users WHERE email=$1",
-      [email]
-    );
-    if (responseEmailExists.rows[0].count != 0) {
-      return res.status(400).send("This e-mail is already taken!");
+    if (email === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Request syntax error",
+      });
     }
 
+    const responseEmailExists = await pool.query("SELECT COUNT(*) FROM users WHERE email=$1", [email]);
+    if (responseEmailExists.rows[0].count != 0) {
+      return res.status(400).json({
+        success: false,
+        message: `E-mail ${email} is already taken!`,
+      });
+    }
+
+    req.message = `E-mail ${email} is free!`;
     next();
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
@@ -30,14 +38,22 @@ const emailExists = async (req, res, next) => {
 const nicknameExists = async (req, res, next) => {
   try {
     const { nickname } = req.body;
-    const responseEmailExists = await pool.query(
-      "SELECT COUNT(*) FROM users WHERE nickname=$1",
-      [nickname]
-    );
-    if (responseEmailExists.rows[0].count != 0) {
-      return res.status(400).send("This nickname is already taken!");
+    if (nickname === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Request syntax error",
+      });
     }
 
+    const responseEmailExists = await pool.query("SELECT COUNT(*) FROM users WHERE nickname=$1", [nickname]);
+    if (responseEmailExists.rows[0].count != 0) {
+      return res.status(400).json({
+        success: false,
+        message: `Nickname ${nickname} is already taken!`,
+      });
+    }
+
+    req.message = `Nickname ${nickname} is free!`;
     next();
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
@@ -47,14 +63,22 @@ const nicknameExists = async (req, res, next) => {
 const userIdExists = async (req, res, next) => {
   try {
     const { user_id } = req.body;
-    const responseUserIdExists = await pool.query(
-      "SELECT COUNT(*) FROM users WHERE id=$1",
-      [user_id]
-    );
-    if (responseUserIdExists.rows[0].count != 0) {
-      return res.status(400).send("This e-mail is already taken!");
+    if (user_id === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Request syntax error",
+      });
     }
 
+    const responseUserIdExists = await pool.query("SELECT COUNT(*) FROM users WHERE id=$1", [user_id]);
+    if (responseUserIdExists.rows[0].count != 0) {
+      return res.status(400).json({
+        success: false,
+        message: "This ID is already taken!",
+      });
+    }
+
+    req.message = "This ID is free!";
     next();
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
@@ -64,6 +88,13 @@ const userIdExists = async (req, res, next) => {
 ////////////////////////////////////////////////////
 
 ////////// ENDPOINTS:
+// Для положительного результата
+const ifSuccess = async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: req.message,
+  });
+};
 // РЕГИСТРАЦИЯ
 const register = async (req, res) => {
   const errors = validationResult(req);
@@ -101,10 +132,7 @@ const login = async (req, res) => {
   // Проверка данных в БД
   try {
     const { email, password } = req.body;
-    const responseLogin = await pool.query(
-      "SELECT * FROM users WHERE email=$1",
-      [email]
-    );
+    const responseLogin = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
 
     // Проверка на email
     if (responseLogin.rowCount === 0) {
@@ -112,10 +140,7 @@ const login = async (req, res) => {
     }
 
     // Проверка пароля
-    const validPassword = await bcrypt.compare(
-      password,
-      responseLogin.rows[0].password
-    );
+    const validPassword = await bcrypt.compare(password, responseLogin.rows[0].password);
     if (!validPassword) {
       return res.status(400).json({ errors: "Wrong password!" });
     }
@@ -123,10 +148,7 @@ const login = async (req, res) => {
     // Создать и присвоить JWT
     // В Header поле "auth-token" - там сам токен JWT
     // ID пользователя - в req.user.id
-    const token = jwt.sign(
-      { id: responseLogin.rows[0].id },
-      process.env.TOKEN_SECRET
-    );
+    const token = jwt.sign({ id: responseLogin.rows[0].id }, process.env.TOKEN_SECRET);
     res.header("auth-token", token).status(200).send("Succesful login!");
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
@@ -140,5 +162,6 @@ module.exports = {
   emailExists,
   nicknameExists,
   userIdExists,
+  ifSuccess,
   login,
 };

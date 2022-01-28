@@ -1,9 +1,17 @@
 import { useInput } from "../../hooks/register.validation";
 
 const RegistrationPage = () => {
-  const email = useInput("", { isEmpty: true, emailError: true });
+  const email = useInput("", {
+    isEmpty: true,
+    emailError: true,
+    isTaken: { url: "/auth/emailexists", fieldToCheck: "email" },
+  });
   const password = useInput("", { isEmpty: true, minLength: 8 });
-  const nickname = useInput("", { isEmpty: true, minLength: 3 });
+  const nickname = useInput("", {
+    isEmpty: true,
+    minLength: 3,
+    isTaken: { url: "/auth/nickexists", fieldToCheck: "nickname" },
+  });
   const daySelect = useInput("", { isEmpty: true, selectDefaultError: true });
   const monthSelect = useInput("", { isEmpty: true, selectDefaultError: true });
   const yearSelect = useInput("", { isEmpty: true, selectDefaultError: true });
@@ -57,8 +65,6 @@ const RegistrationPage = () => {
     );
   });
 
-  //const errorStyle = "error_input";
-
   return (
     <div className="registration">
       <form className="form">
@@ -68,11 +74,14 @@ const RegistrationPage = () => {
             <label>E-mail</label>
             {email.isDirty && email.isEmpty && <span>{email.errorMessage.isEmpty}</span>}
             {email.isDirty && !email.isEmpty && email.emailError && <span>{email.errorMessage.isEmail}</span>}
+            {email.isDirty && !email.isEmpty && !email.emailError && email.isTaken && (
+              <span>{email.errorMessage.isTakenError}</span>
+            )}
           </div>
 
           <input
             placeholder="example@gmail.com"
-            className={email.isDirty && (email.isEmpty || email.emailError) ? "error_input" : ""}
+            className={email.isDirty && (email.isEmpty || email.emailError || email.isTaken) ? "error_input" : ""}
             onChange={(e) => email.onChange(e)}
             onBlur={(e) => email.onBlur(e)}
             value={email.value}
@@ -108,11 +117,16 @@ const RegistrationPage = () => {
             {nickname.isDirty && !nickname.isEmpty && nickname.minLengthError && (
               <span>{nickname.errorMessage.minLength}</span>
             )}
+            {nickname.isDirty && !nickname.isEmpty && !nickname.minLengthError && nickname.isTaken && (
+              <span>{nickname.errorMessage.isTakenError}</span>
+            )}
           </div>
 
           <input
             placeholder="CoolName"
-            className={nickname.isDirty && (nickname.isEmpty || nickname.minLengthError) ? "error_input" : ""}
+            className={
+              nickname.isDirty && (nickname.isEmpty || nickname.minLengthError || nickname.isTaken) ? "error_input" : ""
+            }
             onChange={(e) => nickname.onChange(e)}
             onBlur={(e) => nickname.onBlur(e)}
             value={nickname.value}
