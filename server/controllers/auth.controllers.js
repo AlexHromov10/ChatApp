@@ -5,6 +5,7 @@ require("dotenv").config();
 const { role_user } = require("../constants/role.constants");
 const { validationResult } = require("express-validator/check");
 const jwt = require("jsonwebtoken");
+const e = require("cors");
 
 const saltRounds = 10; // data processing time
 
@@ -16,7 +17,7 @@ const emailExists = async (req, res, next) => {
     if (email === undefined) {
       return res.status(400).json({
         success: false,
-        message: "Request syntax error",
+        message: "Неверный запрос",
       });
     }
 
@@ -24,11 +25,17 @@ const emailExists = async (req, res, next) => {
     if (responseEmailExists.rows[0].count != 0) {
       return res.status(400).json({
         success: false,
-        message: `E-mail ${email} is already taken!`,
+        message: `E-mail уже занят`,
+        data: {
+          email: email,
+        },
       });
     }
 
-    req.message = `E-mail ${email} is free!`;
+    req.message = `E-mail свободен`;
+    req.data = {
+      email: email,
+    };
     next();
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
@@ -41,7 +48,7 @@ const nicknameExists = async (req, res, next) => {
     if (nickname === undefined) {
       return res.status(400).json({
         success: false,
-        message: "Request syntax error",
+        message: "Неверный запрос",
       });
     }
 
@@ -49,11 +56,17 @@ const nicknameExists = async (req, res, next) => {
     if (responseEmailExists.rows[0].count != 0) {
       return res.status(400).json({
         success: false,
-        message: `Nickname ${nickname} is already taken!`,
+        message: `Никнейм уже занят`,
+        data: {
+          nickname: nickname,
+        },
       });
     }
 
-    req.message = `Nickname ${nickname} is free!`;
+    req.message = `Никнейм свободен`;
+    req.data = {
+      nickname: nickname,
+    };
     next();
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
@@ -66,7 +79,7 @@ const userIdExists = async (req, res, next) => {
     if (user_id === undefined) {
       return res.status(400).json({
         success: false,
-        message: "Request syntax error",
+        message: "Неверный запрос",
       });
     }
 
@@ -74,11 +87,17 @@ const userIdExists = async (req, res, next) => {
     if (responseUserIdExists.rows[0].count != 0) {
       return res.status(400).json({
         success: false,
-        message: "This ID is already taken!",
+        message: "Этот ID уже занят",
+        data: {
+          user_id: user_id,
+        },
       });
     }
 
-    req.message = "This ID is free!";
+    req.message = "Этот ID свободен";
+    req.data = {
+      user_id: user_id,
+    };
     next();
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
@@ -93,6 +112,7 @@ const ifSuccess = async (req, res) => {
   return res.status(200).json({
     success: true,
     message: req.message,
+    data: req.data,
   });
 };
 // РЕГИСТРАЦИЯ
@@ -115,7 +135,18 @@ const register = async (req, res) => {
       "INSERT INTO users (id,email,password,role,nickname, birth_date,created_at) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *",
       [user_id, email, hash, role, nickname, birth_date, created_at]
     );
-    return res.status(200).send("Succesful registration!");
+    return res.status(200).json({
+      success: true,
+      message: `Успешная регистрация!`,
+      data: {
+        user_id: user_id,
+        email: email,
+        role: role,
+        nickname: nickname,
+        birth_date: birth_date,
+        created_at: created_at,
+      },
+    });
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
   }
@@ -136,20 +167,40 @@ const login = async (req, res) => {
 
     // Проверка на email
     if (responseLogin.rowCount === 0) {
-      return res.status(400).json({ errors: "Wrong email!" });
+      return res.status(400).json({
+        success: false,
+        message: `Неверный e-mail`,
+      });
     }
 
     // Проверка пароля
     const validPassword = await bcrypt.compare(password, responseLogin.rows[0].password);
     if (!validPassword) {
-      return res.status(400).json({ errors: "Wrong password!" });
+      return res.status(400).json({
+        success: false,
+        message: `Неверный пароль`,
+      });
     }
 
     // Создать и присвоить JWT
     // В Header поле "auth-token" - там сам токен JWT
     // ID пользователя - в req.user.id
     const token = jwt.sign({ id: responseLogin.rows[0].id }, process.env.TOKEN_SECRET);
-    res.header("auth-token", token).status(200).send("Succesful login!");
+    res
+      .header("auth-token", token)
+      .status(200)
+      .json({
+        success: true,
+        message: `Успешный вход`,
+        data: {
+          user_id: user_id,
+          email: email,
+          role: role,
+          nickname: nickname,
+          birth_date: birth_date,
+          created_at: created_at,
+        },
+      });
   } catch (error) {
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
   }

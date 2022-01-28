@@ -133,7 +133,7 @@ const useValidation = (value, isDirty, validations) => {
                   setIsTaken(true);
                   setErrorMessage((errorMessage) => ({
                     ...errorMessage,
-                    isTakenError: "Занято!",
+                    isTakenError: jsonData["message"],
                   }));
                 }
               } catch (error) {
