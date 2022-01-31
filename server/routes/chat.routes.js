@@ -1,17 +1,12 @@
 var express = require("express");
 var router = express.Router();
 const chatControllers = require("../controllers/chat.controllers");
-const verifyJwt = require("../controllers/verifyJwt");
-const authControllers = require("../controllers/auth.controllers");
+const verifyJwt = require("../controllers/auth/verifyJwt");
+const authControllers = require("../controllers/auth/auth.controllers");
 
 // Пример: ~/chat/create
 // Создать чат
-router.post(
-  "/create",
-  verifyJwt,
-  chatControllers.createChat,
-  chatControllers.addUserToChat
-);
+router.post("/create", verifyJwt, chatControllers.createChat, chatControllers.addUserToChat);
 
 // Удалить чат
 router.post(

@@ -1,11 +1,12 @@
-const { pool, dbErrorsHandling } = require("../db");
+const { pool, dbErrorsHandling } = require("../../db");
 const bcrypt = require("bcrypt"); // bcrypt
 const crypto = require("crypto");
 require("dotenv").config();
-const { role_user } = require("../constants/role.constants");
+const { role_user } = require("../../constants/role.constants");
 const { validationResult } = require("express-validator/check");
 const jwt = require("jsonwebtoken");
 const e = require("cors");
+const { sendEmail } = require("./emailVerification");
 
 const saltRounds = 10; // data processing time
 
@@ -115,6 +116,7 @@ const ifSuccess = async (req, res) => {
     data: req.data,
   });
 };
+
 // РЕГИСТРАЦИЯ
 const register = async (req, res) => {
   const errors = validationResult(req);
@@ -131,13 +133,17 @@ const register = async (req, res) => {
     const role = role_user;
     const created_at = new Date();
 
+    const email_verification_code = await bcrypt.hash(password, saltRounds);
+
+    sendEmail(email, email_verification_code);
+
     const responseRegister = await pool.query(
-      "INSERT INTO users (id,email,password,role,nickname, birth_date,created_at) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *",
-      [user_id, email, hash, role, nickname, birth_date, created_at]
+      "INSERT INTO users (id,email,password,role,nickname, birth_date,created_at,active) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
+      [user_id, email, hash, role, nickname, birth_date, created_at, false]
     );
     return res.status(200).json({
       success: true,
-      message: `Успешная регистрация!`,
+      message: `Успешная регистрация! Осталось подтвердить почту!`,
       data: {
         user_id: user_id,
         email: email,
@@ -148,6 +154,7 @@ const register = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
   }
 };

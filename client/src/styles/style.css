@@ -1,13 +1,22 @@
 body {
-  width: 100vw;
-  height: 100vh;
   margin: 0;
-  background: linear-gradient(287.31deg, #4b066b 0.36%, #093385 100%);
+  background: #5c258d;
+  /* fallback for old browsers */
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-gradient(linear, left top, right top, from(#5c258d), to(#4389a2));
+  background: linear-gradient(to right, #5c258d, #4389a2);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   font-family: "Segoe UI", sans-serif;
   font-size: 20px;
   font-weight: 400;
   color: white;
   padding: 5px;
+}
+
+@media (max-width: 450px) {
+  body {
+    font-size: 16px;
+  }
 }
 
 .registration {
@@ -20,12 +29,12 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin-top: 100px;
+  margin-top: 20px;
   margin-bottom: auto;
 }
 
 .registration .form {
-  background-color: rgba(136, 136, 136, 0.151);
+  background-color: rgba(46, 46, 46, 0.342);
   -webkit-box-shadow: 0px 0px 0px 0px rgba(51, 51, 51, 0.54);
           box-shadow: 0px 0px 0px 0px rgba(51, 51, 51, 0.54);
   display: -webkit-box;
@@ -38,11 +47,30 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 600px;
   -webkit-transition: -webkit-box-shadow 0.2s ease-in-out;
   transition: -webkit-box-shadow 0.2s ease-in-out;
   transition: box-shadow 0.2s ease-in-out;
   transition: box-shadow 0.2s ease-in-out, -webkit-box-shadow 0.2s ease-in-out;
+  border-radius: 15px;
+  width: 40%;
+}
+
+@media (max-width: 770px) {
+  .registration .form {
+    width: 80%;
+  }
+}
+
+@media (max-width: 450px) {
+  .registration .form {
+    width: 90%;
+  }
+}
+
+@media (max-width: 350px) {
+  .registration .form {
+    width: 90%;
+  }
 }
 
 .registration .form h1 {
@@ -57,18 +85,32 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 500px;
+  width: 90%;
   margin-bottom: 10px;
 }
 
 .registration .form .form-group span {
+  text-align: end;
   display: inline-flexbox;
   margin: 0;
+  margin-bottom: 3px;
   color: #d62a2a;
-  font-size: 20px;
+}
+
+@media (max-width: 450px) {
+  .registration .form .form-group span {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 350px) {
+  .registration .form .form-group span {
+    font-size: 14px;
+  }
 }
 
 .registration .form .form-group label {
+  min-width: 110px;
   display: inline-flexbox;
   margin-bottom: 3px;
 }
@@ -88,6 +130,12 @@ body {
   padding: 0px;
   border: 1px white;
   border-bottom-style: solid;
+}
+
+@media (max-width: 450px) {
+  .registration .form .form-group input {
+    font-size: 16px;
+  }
 }
 
 .registration .form .form-group ::-webkit-input-placeholder {
@@ -124,7 +172,7 @@ body {
 }
 
 .registration .form .form-group .form-group-date select {
-  width: 150px;
+  width: 30%;
   font-family: "Segoe UI", sans-serif;
   font-size: 20px;
   font-weight: 400;
@@ -140,6 +188,12 @@ body {
   border: 1px white;
   border-bottom-style: solid;
   outline: none;
+}
+
+@media (max-width: 450px) {
+  .registration .form .form-group .form-group-date select {
+    font-size: 16px;
+  }
 }
 
 .registration .form .form-group .form-group-date select option {
@@ -193,19 +247,33 @@ body {
   height: 80px;
   font-size: 25px;
   border: solid 1px;
-  border-radius: 5px;
+  border-radius: 15px;
   background-color: rgba(255, 255, 255, 0.212);
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
   cursor: pointer;
+  margin: 0;
+}
+
+@media (max-width: 450px) {
+  .registration .form .form-group button {
+    font-size: 16px;
+  }
 }
 
 .registration .form .form-group button:disabled {
   color: #c2c2c2;
   border: solid 1px;
-  border-radius: 5px;
+  border-radius: 15px;
   border-color: rgba(165, 164, 164, 0.11);
   background-color: rgba(165, 164, 164, 0.11);
   cursor: default;
+}
+
+.registration .form .form-group .link {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.486);
+  text-decoration: none;
+  font-size: 20px;
 }
 /*# sourceMappingURL=style.css.map */

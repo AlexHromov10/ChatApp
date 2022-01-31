@@ -2,9 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
-var chat = require("./routes/chat.routes");
-var auth = require("./routes/auth.routes");
-var messages = require("./routes/messages.routes");
+
+const chat = require("./routes/chat.routes");
+const auth = require("./routes/auth.routes");
+const messages = require("./routes/messages.routes");
 
 // middleware
 app.use(cors());
@@ -13,13 +14,31 @@ app.use("/chat", chat);
 app.use("/auth", auth);
 app.use("/messages", messages);
 
+// io.on("connection", (socket) => {
+//   socket.on("message", ({ nickname, message }) =>{
+//     io.emmit("message",{nickname, message});
+//   )}
+// });
+
 // СТАРТ //
 const start = () => {
   try {
-    app.listen(process.env.serverPORT, () => console.log(`Started on port ${process.env.serverPORT}`));
+    const server = app.listen(process.env.serverPORT, () => console.log(`Started on port ${process.env.serverPORT}`));
+
+    return server;
   } catch (error) {
     console.log(error);
   }
 };
 
-start();
+const server = start();
+
+// подключаем к серверу Socket.IO
+// const io = require("socket.io")(server, {
+//   cors: {
+//     origin: "*",
+//   },
+// });
+// io.on("connection", (socket) => {
+//   console.log("---User connected---\n" + socket.id);
+// });

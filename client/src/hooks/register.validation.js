@@ -35,6 +35,10 @@ const useValidation = (value, isDirty, validations) => {
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{1,})$/i;
 
     const fetchIsTaken = async (url, fieldToCheck, value) => {
+      if (fieldToCheck.length <= 0) {
+        return;
+      }
+
       const data = { [fieldToCheck]: value };
 
       const response = await fetch(configData.SERVER_URL + url /* "/auth/checkemail" */, {
@@ -114,8 +118,8 @@ const useValidation = (value, isDirty, validations) => {
           break;
 
         case "isTaken":
-          setIsTaken(true);
-          if (!emailError && !minLengthError) {
+          if (!emailError && !minLengthError && validations[validation].fieldToCheck.length > 0) {
+            setIsTaken(true);
             (async () => {
               try {
                 const jsonData = await fetchIsTaken(
