@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
-const validator = require("../validator");
-const authControllers = require("../controllers/auth/auth.controllers");
 const rateLimit = require("express-rate-limit");
+
+const auth = require("../controllers/auth");
 
 const apiLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
@@ -13,21 +13,24 @@ const apiLimiter = rateLimit({
 
 // Пример: ~/auth/login
 // Зарегистрироваться
-router.post(
-  "/register",
-  validator.validateRegister,
-  authControllers.emailExists,
-  authControllers.nicknameExists,
-  authControllers.register
-);
+router.post("/register", auth.validateData.validateRegister, auth.isEmailFree, auth.isNicknameFree, auth.register);
 
 // Войти в систему
-router.post("/login", validator.validateLogin, authControllers.login);
+router.post("/login", auth.validateData.validateEmail, auth.login);
 
 //Проверка на существующий email
-router.post("/emailexists", apiLimiter, authControllers.emailExists, authControllers.ifSuccess);
+router.post("/isemailfree", apiLimiter, auth.validateData.validateEmail, auth.isEmailFree, auth.responseSuccess);
 
 //Проверка на существующий nickname
-router.post("/nickexists", apiLimiter, authControllers.nicknameExists, authControllers.ifSuccess);
+router.post(
+  "/isnicknamefree",
+  apiLimiter,
+  auth.validateData.validateNickname,
+  auth.isNicknameFree,
+  auth.responseSuccess
+);
+
+//Проверка на существующий ID
+router.post("/isuseridfree", apiLimiter, auth.validateData.validateUserId, auth.isUserIdFree, auth.responseSuccess);
 
 module.exports = router;

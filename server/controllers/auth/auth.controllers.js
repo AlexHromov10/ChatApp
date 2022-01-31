@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt"); // bcrypt
 const crypto = require("crypto");
 require("dotenv").config();
 const { role_user } = require("../../constants/role.constants");
-const { validationResult } = require("express-validator/check");
+const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const e = require("cors");
 const { sendEmail } = require("./emailVerification");
@@ -129,7 +129,7 @@ const register = async (req, res) => {
   try {
     const hash = await bcrypt.hash(password, saltRounds);
 
-    const user_id = crypto.randomBytes(16).toString("hex");
+    const user_id = crypto.randomUUID();
     const role = role_user;
     const created_at = new Date();
 
@@ -217,9 +217,9 @@ const login = async (req, res) => {
 
 module.exports = {
   register,
-  emailExists,
-  nicknameExists,
-  userIdExists,
+  //emailExists,
+  //nicknameExists,
+  //userIdExists,
   ifSuccess,
   login,
 };

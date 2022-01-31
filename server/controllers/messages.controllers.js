@@ -27,7 +27,7 @@ const sendMessage = async (req, res) => {
   const { text, media, chat_id } = req.body;
   const user_id = req.user.id;
   const created_at = new Date();
-  const id = crypto.randomBytes(16).toString("hex");
+  const id = crypto.randomUUID();
 
   try {
     const responseSendMessage = await pool.query(
