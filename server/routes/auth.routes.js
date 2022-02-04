@@ -1,9 +1,10 @@
 var express = require("express");
 var router = express.Router();
-const rateLimit = require("express-rate-limit");
 
 const auth = require("../controllers/auth");
+const common = require("../controllers/common");
 
+const rateLimit = require("express-rate-limit");
 const apiLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 60, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
@@ -13,24 +14,36 @@ const apiLimiter = rateLimit({
 
 // Пример: ~/auth/login
 // Зарегистрироваться
-router.post("/register", auth.validateData.validateRegister, auth.isEmailFree, auth.isNicknameFree, auth.register);
+router.post("/register", common.validateData.validateRegister, auth.isEmailFree, auth.isNicknameFree, auth.register);
 
 // Войти в систему
-router.post("/login", auth.validateData.validateEmail, auth.login);
+router.post("/login", common.validateData.validateEmail, auth.login);
 
 //Проверка на существующий email
-router.post("/isemailfree", apiLimiter, auth.validateData.validateEmail, auth.isEmailFree, auth.responseSuccess);
+router.post("/isemailfree", apiLimiter, common.validateData.validateEmail, auth.isEmailFree, auth.responseSuccess);
 
 //Проверка на существующий nickname
 router.post(
   "/isnicknamefree",
   apiLimiter,
-  auth.validateData.validateNickname,
+  common.validateData.validateNickname,
   auth.isNicknameFree,
   auth.responseSuccess
 );
 
 //Проверка на существующий ID
-router.post("/isuseridfree", apiLimiter, auth.validateData.validateUserId, auth.isUserIdFree, auth.responseSuccess);
+router.post("/isuseridfree", apiLimiter, common.validateData.validateUserId, auth.isUserIdFree, auth.responseSuccess);
+
+router.get("/emailverification", apiLimiter, auth.emailVerification);
+
+/*
+router.post(
+  "/testemail",
+  apiLimiter,
+  common.validateData.validateEmail,
+  common.validateData.validateUserId,
+  auth.emailverification.testEmailVerification
+);
+*/
 
 module.exports = router;

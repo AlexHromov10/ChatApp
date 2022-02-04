@@ -1,4 +1,4 @@
-const { pool, dbErrorsHandling } = require("../db");
+const { pool, dbErrorsHandling } = require("../../db");
 const crypto = require("crypto");
 require("dotenv").config();
 

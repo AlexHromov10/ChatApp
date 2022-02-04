@@ -4,14 +4,14 @@ const crypto = require("crypto");
 const { randomUUID } = require("crypto");
 const { role_user } = require("../../constants/role.constants");
 const { validationResult } = require("express-validator");
-const { sendEmail } = require("./emailVerification");
+const { sendEmail } = require("../common");
 
 const saltRounds = 10; // data processing time
 
 const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    return res.status(422).json({ success: false, errors: errors.array() });
   }
 
   const { email, password, nickname, birth_date } = req.body;
@@ -24,24 +24,25 @@ const register = async (req, res) => {
     const role = role_user;
     const created_at = new Date();
 
-    //const email_verification_code = await bcrypt.hash(password, saltRounds);
-
-    //sendEmail(email, email_verification_code);
+    const verification_code = crypto.randomUUID();
+    const isSentVerificationCode = await sendEmail({
+      to: email,
+      subject: "Yupchick Chat. Подтверждение e-mail адреса",
+      text: `Для подтверждения e-mail адреса перейдите по ссылке: ${process.env.serverIP}/auth/emailverification?verification_code=${verification_code}`,
+    });
+    if (!isSentVerificationCode.success) {
+      return res.status(422).json({ success: false, message: "Не существующий email" });
+    }
 
     const responseRegister = await pool.query(
-      "INSERT INTO users (id,email,password,role,nickname, birth_date,created_at,active) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
-      [user_id, email, hash, role, nickname, birth_date, created_at, false]
+      "INSERT INTO users (id,email,password,role,nickname, birth_date,created_at,active,verification_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
+      [user_id, email, hash, role, nickname, birth_date, created_at, false, verification_code]
     );
     return res.status(200).json({
       success: true,
-      message: `Успешная регистрация! Осталось подтвердить почту!`,
-      data: {
-        user_id: user_id,
-        email: email,
-        role: role,
-        nickname: nickname,
-        birth_date: birth_date,
-        created_at: created_at,
+      message: {
+        h1: "Успешная регистрация!",
+        p: "На вашу почту было выслано сообщение с ссылкой для активации вашего аккаунта!",
       },
     });
   } catch (error) {

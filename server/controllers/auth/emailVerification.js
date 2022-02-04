@@ -1,37 +1,41 @@
+const { pool, dbErrorsHandling } = require("../../db");
+
 require("dotenv").config();
-const nodemailer = require("nodemailer");
-const IPs = require("./IPs");
 
-function sendEmail(email, email_verification_code) {
-  const transporter = nodemailer.createTransport({
-    port: 465, // true for 465, false for other ports
-    host: "smtp.gmail.com",
-    auth: {
-      user: process.env.chatEmail_address,
-      pass: process.env.chatEmail_password,
-    },
-    secure: true,
-  });
+const emailVerification = async (req, res) => {
+  const { verification_code } = req.query;
+  try {
+    const responseEmailVerification = await pool.query("SELECT * FROM users WHERE verification_code=$1", [
+      verification_code,
+    ]);
+    if (responseEmailVerification.rowCount === 0) {
+      return res.status(422).json({
+        success: false,
+        message: `Неверный код подтверждения e-mail`,
+      });
+    }
 
-  const mailData = () => {
-    return {
-      from: process.env.chatEmail_address, // sender address
-      to: email, // list of receivers
-      subject: "Yupchick Chat. Подтверждение e-mail адреса",
-      text: `Для подтверждения e-mail адреса перейдите по ссылке: ${
-        IPs.myIP().express_ip
-      }/auth/emailverification/${email_verification_code}`,
-    };
-  };
-
-  console.log(mailData());
-
-  transporter.sendMail(mailData, function (err, info) {
-    if (err) console.log(err);
-    else console.log(info);
-  });
-}
-
-module.exports = {
-  sendEmail,
+    const { id, email, role, nickname, birth_date, created_at } = responseEmailVerification.rows[0];
+    const responseUpdateUsersActiveField = await pool.query(
+      "UPDATE users SET active = true WHERE id = $1 RETURNING *",
+      [id]
+    );
+    return res.status(200).json({
+      success: true,
+      message: `Аккаунт подтвержден!`,
+      data: {
+        user_id: id,
+        email: email,
+        role: role,
+        nickname: nickname,
+        birth_date: birth_date,
+        created_at: created_at,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json([dbErrorsHandling(error.code), { details: error.detail }]);
+  }
 };
+
+module.exports = emailVerification;

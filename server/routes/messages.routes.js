@@ -1,9 +1,8 @@
 var express = require("express");
 var router = express.Router();
-const messagesControllers = require("../controllers/messages.controllers");
-const chatControllers = require("../controllers/chat.controllers");
-const verifyJwt = require("../controllers/auth/verifyJwt");
-const authControllers = require("../controllers/auth/auth.controllers");
+const messagesControllers = require("../controllers/messages/messages.controllers");
+const chatControllers = require("../controllers/chat/chat.controllers");
+const { verifyJwt } = require("../controllers/common");
 
 // Пример: ~/messages/get
 // Получить сообщения
