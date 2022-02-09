@@ -2,6 +2,7 @@ import configData from "../../config.json";
 import { TextInput, DateSelector } from "../../components/form.components/";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+const { birth_date } = require("../../constants/selector.constants");
 //import { useHistory } from "react-router-dom";
 
 const RegistrationPage = () => {
@@ -9,7 +10,7 @@ const RegistrationPage = () => {
 
   const [registrationState, setRegistrationState] = useState({ isFinished: false, success: false, message: "" });
 
-  const handleSubmit = async (e) => {
+  const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -19,10 +20,10 @@ const RegistrationPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: emailValue,
-          password: passwordValue,
-          nickname: nicknameValue,
-          birth_date: dateValue,
+          email: e.target.email.value,
+          password: e.target.password.value,
+          nickname: e.target.nickname.value,
+          birth_date: birth_date(e.target.year.value, e.target.month.value, e.target.day.value),
         }),
       });
       const jsonData = await response.json();
@@ -36,16 +37,17 @@ const RegistrationPage = () => {
     }
   };
 
-  const [emailValue, setEmailValue] = useState("");
-  const [passwordValue, setPasswordValue] = useState("");
-  const [nicknameValue, setNicknameValue] = useState("");
-  const [dateValue, setDateValue] = useState("");
+  const [emailValid, setEmailValid] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [nicknameValid, setNicknameValid] = useState(false);
+  const [dateValid, setDateValid] = useState(false);
 
   return (
     <>
+      {console.log("RENDER")}
       {!registrationState.isFinished && !registrationState.success && (
         <div className="registration">
-          <form className="form" onSubmit={handleSubmit}>
+          <form className="form" onSubmit={handleRegistrationSubmit}>
             <h1>Регистрация</h1>
             <div className="form-group">
               <TextInput
@@ -57,7 +59,7 @@ const RegistrationPage = () => {
                 label="Email"
                 placeholder="example@gmail.com"
                 name="email"
-                setValue={setEmailValue}
+                setValue={setEmailValid}
               />
             </div>
 
@@ -70,7 +72,8 @@ const RegistrationPage = () => {
                 label="Пароль"
                 placeholder="••••••••"
                 name="password"
-                setValue={setPasswordValue}
+                setValue={setPasswordValid}
+                type="password"
               />
             </div>
 
@@ -84,24 +87,16 @@ const RegistrationPage = () => {
                 label="Никнейм"
                 placeholder="CoolName"
                 name="nickname"
-                setValue={setNicknameValue}
+                setValue={setNicknameValid}
               />
             </div>
 
             <div className="form-group">
-              <DateSelector setDateValue={setDateValue} />
+              <DateSelector setDateValid={setDateValid} />
             </div>
 
             <div className="form-group">
-              <button
-                disabled={
-                  !emailValue.length > 0 ||
-                  !passwordValue.length > 0 ||
-                  !nicknameValue.length > 0 ||
-                  !dateValue.length > 0
-                }
-                type="submit"
-              >
+              <button disabled={!emailValid || !passwordValid || !nicknameValid || !dateValid} type="submit">
                 Зарегистрироваться
               </button>
             </div>
@@ -118,7 +113,7 @@ const RegistrationPage = () => {
         <div className="registration">
           <div className="form">
             <div className="form-group">
-              <h1>{registrationState.message.h1}</h1>
+              <h2>{registrationState.message.h2}</h2>
               <p>{registrationState.message.p}</p>
             </div>
           </div>

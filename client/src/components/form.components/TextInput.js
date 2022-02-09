@@ -5,11 +5,15 @@ export function TextInput(props) {
   const textInput = useInput("", props.validators);
 
   useEffect(() => {
+    //console.log(textInput.inputValid);
     if (textInput.inputValid) {
-      props.setValue(textInput.value);
+      props.setValue(true);
+      //console.log(textInput.value);
+    } else {
+      props.setValue(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [textInput.inputValid]);
+  }, [textInput.inputValid /* , textInput.value*/]);
 
   return (
     <>
@@ -41,7 +45,7 @@ export function TextInput(props) {
         value={textInput.value}
         name={props.name}
         id={props.name}
-        type="text"
+        type={props.type}
       ></input>
     </>
   );

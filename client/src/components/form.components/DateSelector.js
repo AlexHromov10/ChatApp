@@ -9,7 +9,10 @@ export function DateSelector(props) {
 
   useEffect(() => {
     if (daySelect.inputValid && monthSelect.inputValid && yearSelect.inputValid) {
-      props.setDateValue(birth_date(yearSelect.value, monthSelect.value, daySelect.value));
+      props.setDateValid(true);
+      birth_date(yearSelect.value, monthSelect.value, daySelect.value);
+    } else {
+      props.setDateValid(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daySelect.inputValid, monthSelect.inputValid, yearSelect.inputValid]);
