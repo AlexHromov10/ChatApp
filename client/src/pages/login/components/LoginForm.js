@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import { useAuth } from "../../../hooks/auth";
+import { useAuth } from "../../../hooks/auth.hook";
 import { TextInput } from "../../../components/form.components/";
 import configData from "../../../config.json";
 
 export function LoginForm(props) {
-  const [setToken] = useAuth("");
+  const { setToken } = useAuth();
 
   const [loginError, setLoginError] = useState(false);
 
@@ -36,7 +36,6 @@ export function LoginForm(props) {
       console.log(jwt);
 
       if (jsonData.success) {
-        localStorage.setItem("auth-token", jwt);
         setToken(jwt);
         navigate("/home");
       } else {

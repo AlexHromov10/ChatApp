@@ -118,12 +118,7 @@ const useValidation = (value, isDirty, validations) => {
           break;
 
         case "isTaken":
-          if (
-            !emailError &&
-            !minLengthError &&
-            validations[validation].fieldToCheck /*&&
-            validations[validation].value*/
-          ) {
+          if (!emailError && !minLengthError && validations[validation].fieldToCheck && value) {
             (async () => {
               try {
                 const jsonData = await fetchIsTaken(

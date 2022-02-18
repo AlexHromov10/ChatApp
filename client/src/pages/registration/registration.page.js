@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { RegistrationForm } from "./components/RegistrationForm";
-import { MessageBox } from "../../components/ui.components";
-import { useAuth } from "../../hooks/auth";
+import { MessageBox } from "../../components/main.components";
+import { useAuth } from "../../hooks/auth.hook";
 
 const RegistrationPage = () => {
   const [registrationState, setRegistrationState] = useState({ isFinished: false, success: false, message: "" });
-  const [token] = useAuth("");
+  const { token } = useAuth("");
 
   return (
     <>

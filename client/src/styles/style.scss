@@ -12,8 +12,20 @@
   }
 }
 
+@mixin for-phone {
+  @media (max-width: 450px) {
+    @content;
+  }
+}
+
 @mixin for-tablet {
-  @media (max-width: 770px) {
+  @media (max-width: 800px) {
+    @content;
+  }
+}
+
+@mixin for-notebook {
+  @media (max-width: 1200px) {
     @content;
   }
 }
@@ -32,6 +44,41 @@
   padding: 5px;
   @include for-phone {
     font-size: 16px;
+  }
+}
+
+html {
+  padding: 0px 150px;
+
+  @include for-notebook {
+    padding: 0px 50px;
+  }
+
+  @include for-tablet {
+    padding: 0px 0px;
+  }
+
+  @include for-phone {
+    padding: 0px 0px;
+  }
+  @include for-phone-small {
+    padding: 0px 0px;
+  }
+}
+
+nav {
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  .link {
+    display: flex;
+    text-align: center;
+    color: white;
+    background-color: rgba(46, 46, 46, 0.342);
+    text-decoration: none;
+    font-size: 20px;
+    margin-right: 10px;
+    padding: 5px 10px;
   }
 }
 
@@ -63,6 +110,24 @@ body {
   border: 1px rgb(255, 255, 255);
   border-bottom-style: solid;
 }
+
+@mixin btn {
+  border: solid 1px;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.212);
+  transition: all 0.2s linear;
+  cursor: pointer;
+  margin: 0;
+  &:disabled {
+    color: rgb(194, 194, 194);
+    border: solid 1px;
+    border-radius: 15px;
+    border-color: rgba(165, 164, 164, 0.11);
+    background-color: rgba(165, 164, 164, 0.11);
+    cursor: default;
+  }
+}
+
 .registration {
   display: flex;
   align-items: center;
@@ -167,29 +232,16 @@ body {
 
       button {
         @include input;
+        @include btn;
         height: 80px;
         font-size: 25px;
-        border: solid 1px;
-        border-radius: 15px;
-        background-color: rgba(255, 255, 255, 0.212);
-        transition: all 0.2s linear;
-        cursor: pointer;
-        margin: 0;
-        &:disabled {
-          color: rgb(194, 194, 194);
-          border: solid 1px;
-          border-radius: 15px;
-          border-color: rgba(165, 164, 164, 0.11);
-          background-color: rgba(165, 164, 164, 0.11);
-          cursor: default;
-        }
       }
-      .link {
-        text-align: center;
-        color: rgba(255, 255, 255, 0.486);
-        text-decoration: none;
-        font-size: 20px;
-      }
+    }
+    .link {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.486);
+      text-decoration: none;
+      font-size: 20px;
     }
   }
 }

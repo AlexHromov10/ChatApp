@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./hooks/auth";
+import { AuthProvider } from "./hooks/auth.hook";
 
-import { RegistrationPage, LoginPage, HomePage } from "./pages/";
-import { NavBar } from "./components/ui.components";
+import { RegistrationPage, LoginPage, HomePage, ChatPage } from "./pages/";
+import { NavBar } from "./components/main.components";
 import { ProtectedRoute } from "./ProtectedRoute";
 function App() {
   return (
@@ -11,8 +11,8 @@ function App() {
         <NavBar />
 
         <Routes>
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/" element={<HomePage />} />
+          <Route path="/chat" element={<ProtectedRoute />}>
+            <Route path="/chat" element={<ChatPage />} />
           </Route>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

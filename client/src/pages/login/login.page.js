@@ -1,11 +1,11 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../hooks/auth";
+import { useAuth } from "../../hooks/auth.hook";
 import { LoginForm } from "./components";
 
 //import { MessageBox } from "../../components/ui.components";
 
 const LoginPage = () => {
-  const [token] = useAuth("");
+  const { token } = useAuth("");
 
   return !token ? <LoginForm /> : <Navigate to="/home" />;
   //return <>{!token && <LoginForm />}</>;
