@@ -1,15 +1,14 @@
-//import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../hooks/auth";
 import { LoginForm } from "./components";
+
 //import { MessageBox } from "../../components/ui.components";
 
 const LoginPage = () => {
-  //const [loginState, setLoginState] = useState({ isFinished: false });
+  const [token] = useAuth("");
 
-  return (
-    <>
-      <LoginForm />
-    </>
-  );
+  return !token ? <LoginForm /> : <Navigate to="/home" />;
+  //return <>{!token && <LoginForm />}</>;
 };
 
 export { LoginPage };

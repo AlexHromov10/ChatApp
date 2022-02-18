@@ -1,21 +1,25 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./hooks/auth";
 
 import { RegistrationPage, LoginPage, HomePage } from "./pages/";
-
+import { NavBar } from "./components/ui.components";
+import { ProtectedRoute } from "./ProtectedRoute";
 function App() {
   return (
     <>
-      <nav>
-        <Link to="/">Домашнаяя страница</Link>
-        <Link to="/login">Войти</Link>
-        <Link to="/registration">Регистрация</Link>
-      </nav>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="*" element={<HomePage />} />
-      </Routes>
+      <AuthProvider>
+        <NavBar />
+
+        <Routes>
+          <Route path="/" element={<ProtectedRoute />}>
+            <Route path="/" element={<HomePage />} />
+          </Route>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/registration" element={<RegistrationPage />} />
+          <Route path="*" element={<HomePage />} />
+        </Routes>
+      </AuthProvider>
     </>
   );
 }

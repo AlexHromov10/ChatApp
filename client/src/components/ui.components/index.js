@@ -1,3 +1,4 @@
 import { MessageBox } from "./MessageBox";
+import { NavBar } from "./NavBar";
 
-export { MessageBox };
+export { MessageBox, NavBar };

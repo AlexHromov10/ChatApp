@@ -1,9 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+
+import { useAuth } from "../../../hooks/auth";
 import { TextInput } from "../../../components/form.components/";
 import configData from "../../../config.json";
 
 export function LoginForm(props) {
+  const [setToken] = useAuth("");
+
   const [loginError, setLoginError] = useState(false);
 
   const [emailValid, setEmailValid] = useState(false);
@@ -33,6 +37,7 @@ export function LoginForm(props) {
 
       if (jsonData.success) {
         localStorage.setItem("auth-token", jwt);
+        setToken(jwt);
         navigate("/home");
       } else {
         setLoginError(true);
