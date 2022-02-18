@@ -17,37 +17,51 @@ const login = async (req, res) => {
   try {
     const responseLogin = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
 
-    const { user_id, role, nickname, birth_date, created_at } = responseLogin.rows[0];
-
     // Проверка на email
     if (responseLogin.rowCount === 0) {
       return res.status(422).json({
         success: false,
+        errors: `email`,
         message: `Неверный e-mail`,
       });
     }
+
+    const { id, role, nickname, birth_date, created_at, active } = responseLogin.rows[0];
 
     // Проверка пароля
     const validPassword = await bcrypt.compare(password, responseLogin.rows[0].password);
     if (!validPassword) {
       return res.status(422).json({
         success: false,
-        message: `Неверный пароль`,
+        errors: `password`,
+        message: {
+          h2: "Неверный пароль!",
+          p: "На вашу почту было выслано сообщение с ссылкой для активации вашего аккаунта!",
+        },
+      });
+    }
+
+    if (!active) {
+      return res.status(403).json({
+        success: false,
+        errors: `active`,
+        message: `Аккаунт не активирован! Подтвердите аккаунт через почту!`,
       });
     }
 
     // Создать и присвоить JWT
     // В Header поле "auth-token" - там сам токен JWT
     // ID пользователя - в req.user.id
-    const token = jwt.sign({ id: responseLogin.rows[0].id }, process.env.TOKEN_SECRET);
+    const token = jwt.sign({ id: id }, process.env.TOKEN_SECRET);
     res
       .header("auth-token", token)
+      .header("Access-Control-Expose-Headers", "auth-token")
       .status(200)
       .json({
         success: true,
         message: `Успешный вход`,
         data: {
-          user_id: user_id,
+          user_id: id,
           email: email,
           role: role,
           nickname: nickname,

@@ -47,6 +47,10 @@ body {
   @include text;
 }
 
+.absolute {
+  position: absolute;
+}
+
 @mixin input {
   @include text;
   margin-bottom: 0.6em;
@@ -90,28 +94,28 @@ body {
       font-weight: 400;
     }
 
+    span {
+      text-align: end;
+      display: inline-flexbox;
+      //max-width: 150px;
+      margin: 0;
+      margin-bottom: 3px;
+      color: rgb(214, 42, 42);
+      //font-size: 16px;
+      //line-height: 30px;
+      @include for-phone {
+        font-size: 16px;
+      }
+      @include for-phone-small {
+        font-size: 14px;
+      }
+    }
+
     .form-group {
       display: flex;
       flex-direction: column;
       width: 90%;
       margin-bottom: 10px;
-
-      span {
-        text-align: end;
-        display: inline-flexbox;
-        //max-width: 150px;
-        margin: 0;
-        margin-bottom: 3px;
-        color: rgb(214, 42, 42);
-        //font-size: 16px;
-        //line-height: 30px;
-        @include for-phone {
-          font-size: 16px;
-        }
-        @include for-phone-small {
-          font-size: 14px;
-        }
-      }
 
       label {
         min-width: 110px;

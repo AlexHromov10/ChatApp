@@ -19,6 +19,10 @@ body {
   }
 }
 
+.absolute {
+  position: absolute;
+}
+
 .registration {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -77,6 +81,26 @@ body {
   font-weight: 400;
 }
 
+.registration .form span {
+  text-align: end;
+  display: inline-flexbox;
+  margin: 0;
+  margin-bottom: 3px;
+  color: #d62a2a;
+}
+
+@media (max-width: 450px) {
+  .registration .form span {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 350px) {
+  .registration .form span {
+    font-size: 14px;
+  }
+}
+
 .registration .form .form-group {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -87,26 +111,6 @@ body {
           flex-direction: column;
   width: 90%;
   margin-bottom: 10px;
-}
-
-.registration .form .form-group span {
-  text-align: end;
-  display: inline-flexbox;
-  margin: 0;
-  margin-bottom: 3px;
-  color: #d62a2a;
-}
-
-@media (max-width: 450px) {
-  .registration .form .form-group span {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 350px) {
-  .registration .form .form-group span {
-    font-size: 14px;
-  }
 }
 
 .registration .form .form-group label {
