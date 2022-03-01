@@ -29,26 +29,27 @@ const useValidation = (value, isDirty, validations) => {
     }
   }, [isEmpty, minLengthError, emailError, selectError, isTaken]);
 
+  const fetchIsTaken = async (url, fieldToCheck, value) => {
+    if (fieldToCheck.length <= 0) {
+      return;
+    }
+    const data = { [fieldToCheck]: value };
+    //if (data !== "") {
+    const response = await fetch(configData.SERVER_URL + url /* "/auth/checkemail" */, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return await response.json();
+    //}
+  };
+
   useEffect(() => {
     const emailRegex =
       // eslint-disable-next-line no-useless-escape
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{1,})$/i;
-
-    const fetchIsTaken = async (url, fieldToCheck, value) => {
-      if (fieldToCheck.length <= 0) {
-        return;
-      }
-      const data = { [fieldToCheck]: value };
-
-      const response = await fetch(configData.SERVER_URL + url /* "/auth/checkemail" */, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      return await response.json();
-    };
 
     for (const validation in validations) {
       switch (validation) {
@@ -117,12 +118,7 @@ const useValidation = (value, isDirty, validations) => {
           break;
 
         case "isTaken":
-          if (
-            !emailError &&
-            !minLengthError &&
-            validations[validation].fieldToCheck /*&&
-            validations[validation].value*/
-          ) {
+          if (!emailError && !minLengthError && validations[validation].fieldToCheck && value) {
             (async () => {
               try {
                 const jsonData = await fetchIsTaken(
