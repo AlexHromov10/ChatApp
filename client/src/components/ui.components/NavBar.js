@@ -12,10 +12,28 @@ export function NavBar() {
 
   return (
     <nav>
-      <Link to="/">Домашнаяя страница</Link>
-      {!token && <Link to="/login">Войти</Link>}
-      {!token && <Link to="/registration">Регистрация</Link>}
-      {token && <button onClick={handleClick}>Выйти</button>}
+      <div className="nav--left">
+        <Link className="navlink" to="/">
+          <p>Домашнаяя страница</p>
+        </Link>
+      </div>
+      <div className="nav--right">
+        {!token && (
+          <Link className="navlink" to="/login">
+            <p>Войти</p>
+          </Link>
+        )}
+        {!token && (
+          <Link className="navlink" to="/registration">
+            <p>Регистрация</p>
+          </Link>
+        )}
+        {token && (
+          <button className="navlink" onClick={handleClick}>
+            Выйти
+          </button>
+        )}
+      </div>
     </nav>
   );
 }

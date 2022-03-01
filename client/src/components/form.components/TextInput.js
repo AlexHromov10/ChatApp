@@ -32,8 +32,8 @@ export function TextInput(props) {
         placeholder={props.placeholder}
         className={
           input.isDirty && (input.isEmpty || input.minLengthError || input.emailError || input.isTaken)
-            ? "error_input"
-            : ""
+            ? "form-group--input input--error"
+            : "form-group--input"
         }
         onChange={(e) => input.onChange(e)}
         onBlur={(e) => input.onBlur(e)}

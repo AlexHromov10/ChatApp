@@ -25,8 +25,8 @@
 }
 
 @mixin text {
-  font-family: "Segoe UI", sans-serif;
-  font-size: 20px;
+  font-family: "Tahoma", sans-serif;
+  font-size: 18px;
   font-weight: 400;
   color: white;
   padding: 5px;
@@ -35,161 +35,181 @@
   }
 }
 
-body {
-  margin: 0;
-  background: #5c258d; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #5c258d, #4389a2); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #5c258d,
-    #4389a2
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  @include text;
-}
-
-.absolute {
-  position: absolute;
-}
-
 @mixin input {
   @include text;
   margin-bottom: 0.6em;
-  //color: rgb(43, 43, 43);
   box-sizing: border-box;
   outline: none;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: $input-color;
   padding: 0px;
-  border: 1px rgb(255, 255, 255);
-  border-bottom-style: solid;
+  padding-left: 10px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0);
 }
+
+@mixin error {
+  transition: background-color 0.2s linear;
+  background-color: $error-bg-color;
+  border-color: $error-main-color;
+}
+
+body {
+  @include text;
+  background-color: $main-bg;
+  margin: 0;
+  padding: 10px 10px;
+}
+
+nav {
+  background-color: $secondary-bg;
+  border-radius: 30px;
+  //box-shadow: 0px 0px 20px 5px #1f1d30;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 40px;
+  padding: 10px 10px;
+  .nav--left {
+    display: flex;
+    min-width: 300px;
+  }
+  .nav--right {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+  }
+  .navlink {
+    display: flex;
+    min-height: 40px;
+    padding: 0px 10px;
+    font-size: 18px;
+    border-radius: 15px;
+    background-color: $button-color;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    p {
+      margin: 0;
+      color: white;
+    }
+    margin-right: 10px;
+  }
+}
+
 .registration {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 20px;
   margin-bottom: auto;
+}
 
-  .form {
-    background-color: rgba(46, 46, 46, 0.342);
-    box-shadow: 0px 0px 0px 0px rgba(51, 51, 51, 0.54);
+.form {
+  background-color: $secondary-bg;
+  border-radius: 30px;
+  //box-shadow: 0px 0px 20px 5px #1f1d30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+
+  h1 {
+    font-weight: 400;
+  }
+
+  .form-group {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transition: box-shadow 0.2s ease-in-out;
-    border-radius: 15px;
-    width: 40%;
-    @include for-tablet {
-      width: 80%;
-    }
-
-    @include for-phone {
-      width: 90%;
-    }
-    @include for-phone-small {
-      width: 90%;
-    }
-
-    h1 {
-      font-weight: 400;
-    }
+    width: 90%;
+    margin-bottom: 10px;
 
     span {
       text-align: end;
       display: inline-flexbox;
-      //max-width: 150px;
+      min-width: 10px;
       margin: 0;
       margin-bottom: 3px;
-      color: rgb(214, 42, 42);
-      //font-size: 16px;
-      //line-height: 30px;
-      @include for-phone {
-        font-size: 16px;
-      }
-      @include for-phone-small {
-        font-size: 14px;
-      }
+      color: $error-main-color;
     }
 
-    .form-group {
+    .form-group--label-error {
+      flex-direction: row;
       display: flex;
-      flex-direction: column;
-      width: 90%;
-      margin-bottom: 10px;
+      justify-content: space-between;
+    }
+    label {
+      //min-width: 50px;
+      display: inline-flexbox;
+      margin-bottom: 3px;
+    }
+    .form-group--input {
+      @include input;
+      transition: border-color 0.2s;
+    }
+    .input--error {
+      @include error;
+    }
+    .form-group--input:focus {
+      border-color: $border-color;
+    }
 
-      label {
-        min-width: 110px;
-        display: inline-flexbox;
-        margin-bottom: 3px;
-      }
+    .input--error:focus {
+      border-color: $error-main-color;
+    }
 
-      input {
+    ::placeholder {
+      font-weight: 100;
+      color: rgba(255, 255, 255, 0.541);
+    }
+
+    .form-group-date {
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+
+      .date-select {
+        width: 30%;
         @include input;
-      }
-      ::placeholder {
-        font-weight: 100;
-        color: rgba(255, 255, 255, 0.541);
+        outline: none;
       }
 
-      .form-group-date {
-        flex-direction: row;
-        display: flex;
-        justify-content: space-between;
-        select {
-          width: 30%;
-          @include input;
-          //outline: solid 1px;
-          //border-radius: 7px;
-          outline: none;
-          option {
-            font-size: 16px;
-            color: black;
-            background-color: rgba(219, 219, 219, 0.493);
-          }
-        }
-        .error_input {
-          transition: background-color 0.2s linear;
-          background-color: rgba(214, 42, 42, 0.164);
-          border-color: rgb(214, 42, 42);
-        }
+      option {
+        font-size: 16px;
+        background-color: $secondary-bg;
       }
 
-      .form-group--label-error {
-        flex-direction: row;
-        display: flex;
-        justify-content: space-between;
+      .date-select--error {
+        @include error;
       }
-      .error_input {
-        transition: background-color 0.2s linear;
-        background-color: rgba(214, 42, 42, 0.164);
-        border-color: rgb(214, 42, 42);
-      }
-
-      button {
-        @include input;
-        height: 80px;
-        font-size: 25px;
+    }
+    button {
+      @include input;
+      height: 80px;
+      font-size: 25px;
+      border: solid 1px;
+      border-radius: 15px;
+      background-color: $button-color;
+      transition: all 0.2s linear;
+      cursor: pointer;
+      margin: 0;
+      &:disabled {
+        color: rgb(194, 194, 194);
         border: solid 1px;
         border-radius: 15px;
-        background-color: rgba(255, 255, 255, 0.212);
-        transition: all 0.2s linear;
-        cursor: pointer;
-        margin: 0;
-        &:disabled {
-          color: rgb(194, 194, 194);
-          border: solid 1px;
-          border-radius: 15px;
-          border-color: rgba(165, 164, 164, 0.11);
-          background-color: rgba(165, 164, 164, 0.11);
-          cursor: default;
-        }
+        border-color: rgba(165, 164, 164, 0.11);
+        background-color: rgba(165, 164, 164, 0.11);
+        cursor: default;
       }
-      .link {
-        text-align: center;
-        color: rgba(255, 255, 255, 0.486);
-        text-decoration: none;
-        font-size: 20px;
-      }
+    }
+    .link {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.486);
+      text-decoration: none;
+      font-size: 20px;
     }
   }
 }
