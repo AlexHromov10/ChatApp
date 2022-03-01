@@ -2,30 +2,38 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth.hook";
 
 export function NavBar() {
-  const { token, setToken } = useAuth();
+  const { token } = useAuth("");
   const navigate = useNavigate();
 
   const handleClick = () => {
-    setToken(null);
+    localStorage.removeItem("auth-token");
     navigate("/home");
   };
 
   return (
     <nav>
-      <Link className="link" to="/">
-        Домашнаяя страница
-      </Link>
-      {!token && (
-        <Link className="link" to="/login">
-          Войти
+      <div className="nav--left">
+        <Link className="navlink" to="/">
+          <p>Домашнаяя страница</p>
         </Link>
-      )}
-      {!token && (
-        <Link className="link" to="/registration">
-          Регистрация
-        </Link>
-      )}
-      {token && <button onClick={handleClick}>Выйти</button>}
+      </div>
+      <div className="nav--right">
+        {!token && (
+          <Link className="navlink" to="/login">
+            <p>Войти</p>
+          </Link>
+        )}
+        {!token && (
+          <Link className="navlink" to="/registration">
+            <p>Регистрация</p>
+          </Link>
+        )}
+        {token && (
+          <button className="navlink" onClick={handleClick}>
+            Выйти
+          </button>
+        )}
+      </div>
     </nav>
   );
 }
