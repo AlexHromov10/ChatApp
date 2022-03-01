@@ -1,68 +1,12 @@
-html {
-  padding: 0px 150px;
-}
-
-@media (max-width: 1200px) {
-  html {
-    padding: 0px 50px;
-  }
-}
-
-@media (max-width: 800px) {
-  html {
-    padding: 0px 0px;
-  }
-}
-
-@media (max-width: 450px) {
-  html {
-    padding: 0px 0px;
-  }
-}
-
-@media (max-width: 350px) {
-  html {
-    padding: 0px 0px;
-  }
-}
-
-nav {
-  padding-bottom: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-}
-
-nav .link {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  text-align: center;
-  color: white;
-  background-color: rgba(46, 46, 46, 0.342);
-  text-decoration: none;
-  font-size: 20px;
-  margin-right: 10px;
-  padding: 5px 10px;
-}
-
 body {
-  margin: 0;
-  background: #5c258d;
-  /* fallback for old browsers */
-  /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-gradient(linear, left top, right top, from(#5c258d), to(#4389a2));
-  background: linear-gradient(to right, #5c258d, #4389a2);
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  font-family: "Segoe UI", sans-serif;
-  font-size: 20px;
+  font-family: "Tahoma", sans-serif;
+  font-size: 18px;
   font-weight: 400;
   color: white;
   padding: 5px;
+  background-color: #192e41;
+  margin: 0;
+  padding: 10px 10px;
 }
 
 @media (max-width: 450px) {
@@ -71,8 +15,69 @@ body {
   }
 }
 
-.absolute {
-  position: absolute;
+nav {
+  background-color: #2f415f;
+  border-radius: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  min-height: 40px;
+  padding: 10px 10px;
+}
+
+nav .nav--left {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  min-width: 300px;
+}
+
+nav .nav--right {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+}
+
+nav .navlink {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  min-height: 40px;
+  padding: 0px 10px;
+  font-size: 18px;
+  border-radius: 15px;
+  background-color: #2f527a;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+  cursor: pointer;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+nav .navlink p {
+  margin: 0;
+  color: white;
 }
 
 .registration {
@@ -89,10 +94,9 @@ body {
   margin-bottom: auto;
 }
 
-.registration .form {
-  background-color: rgba(46, 46, 46, 0.342);
-  -webkit-box-shadow: 0px 0px 0px 0px rgba(51, 51, 51, 0.54);
-          box-shadow: 0px 0px 0px 0px rgba(51, 51, 51, 0.54);
+.form {
+  background-color: #2f415f;
+  border-radius: 30px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -103,57 +107,14 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-transition: -webkit-box-shadow 0.2s ease-in-out;
-  transition: -webkit-box-shadow 0.2s ease-in-out;
-  transition: box-shadow 0.2s ease-in-out;
-  transition: box-shadow 0.2s ease-in-out, -webkit-box-shadow 0.2s ease-in-out;
-  border-radius: 15px;
   width: 40%;
 }
 
-@media (max-width: 800px) {
-  .registration .form {
-    width: 80%;
-  }
-}
-
-@media (max-width: 450px) {
-  .registration .form {
-    width: 90%;
-  }
-}
-
-@media (max-width: 350px) {
-  .registration .form {
-    width: 90%;
-  }
-}
-
-.registration .form h1 {
+.form h1 {
   font-weight: 400;
 }
 
-.registration .form span {
-  text-align: end;
-  display: inline-flexbox;
-  margin: 0;
-  margin-bottom: 3px;
-  color: #d62a2a;
-}
-
-@media (max-width: 450px) {
-  .registration .form span {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 350px) {
-  .registration .form span {
-    font-size: 14px;
-  }
-}
-
-.registration .form .form-group {
+.form .form-group {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -165,15 +126,36 @@ body {
   margin-bottom: 10px;
 }
 
-.registration .form .form-group label {
-  min-width: 110px;
+.form .form-group span {
+  text-align: end;
+  display: inline-flexbox;
+  min-width: 10px;
+  margin: 0;
+  margin-bottom: 3px;
+  color: #e02a2a;
+}
+
+.form .form-group .form-group--label-error {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.form .form-group label {
   display: inline-flexbox;
   margin-bottom: 3px;
 }
 
-.registration .form .form-group input {
-  font-family: "Segoe UI", sans-serif;
-  font-size: 20px;
+.form .form-group .form-group--input {
+  font-family: "Tahoma", sans-serif;
+  font-size: 18px;
   font-weight: 400;
   color: white;
   padding: 5px;
@@ -182,39 +164,57 @@ body {
           box-sizing: border-box;
   outline: none;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: #1c324b;
   padding: 0px;
-  border: 1px white;
-  border-bottom-style: solid;
+  padding-left: 10px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0);
+  -webkit-transition: border-color 0.2s;
+  transition: border-color 0.2s;
 }
 
 @media (max-width: 450px) {
-  .registration .form .form-group input {
+  .form .form-group .form-group--input {
     font-size: 16px;
   }
 }
 
-.registration .form .form-group ::-webkit-input-placeholder {
+.form .form-group .input--error {
+  -webkit-transition: background-color 0.2s linear;
+  transition: background-color 0.2s linear;
+  background-color: rgba(214, 42, 42, 0.164);
+  border-color: #e02a2a;
+}
+
+.form .form-group .form-group--input:focus {
+  border-color: #8e9ebb;
+}
+
+.form .form-group .input--error:focus {
+  border-color: #e02a2a;
+}
+
+.form .form-group ::-webkit-input-placeholder {
   font-weight: 100;
   color: rgba(255, 255, 255, 0.541);
 }
 
-.registration .form .form-group :-ms-input-placeholder {
+.form .form-group :-ms-input-placeholder {
   font-weight: 100;
   color: rgba(255, 255, 255, 0.541);
 }
 
-.registration .form .form-group ::-ms-input-placeholder {
+.form .form-group ::-ms-input-placeholder {
   font-weight: 100;
   color: rgba(255, 255, 255, 0.541);
 }
 
-.registration .form .form-group ::placeholder {
+.form .form-group ::placeholder {
   font-weight: 100;
   color: rgba(255, 255, 255, 0.541);
 }
 
-.registration .form .form-group .form-group-date {
+.form .form-group .form-group-date {
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
@@ -227,10 +227,10 @@ body {
           justify-content: space-between;
 }
 
-.registration .form .form-group .form-group-date select {
+.form .form-group .form-group-date .date-select {
   width: 30%;
-  font-family: "Segoe UI", sans-serif;
-  font-size: 20px;
+  font-family: "Tahoma", sans-serif;
+  font-size: 18px;
   font-weight: 400;
   color: white;
   padding: 5px;
@@ -239,55 +239,35 @@ body {
           box-sizing: border-box;
   outline: none;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: #1c324b;
   padding: 0px;
-  border: 1px white;
-  border-bottom-style: solid;
+  padding-left: 10px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0);
   outline: none;
 }
 
 @media (max-width: 450px) {
-  .registration .form .form-group .form-group-date select {
+  .form .form-group .form-group-date .date-select {
     font-size: 16px;
   }
 }
 
-.registration .form .form-group .form-group-date select option {
+.form .form-group .form-group-date option {
   font-size: 16px;
-  color: black;
-  background-color: rgba(219, 219, 219, 0.493);
+  background-color: #2f415f;
 }
 
-.registration .form .form-group .form-group-date .error_input {
+.form .form-group .form-group-date .date-select--error {
   -webkit-transition: background-color 0.2s linear;
   transition: background-color 0.2s linear;
   background-color: rgba(214, 42, 42, 0.164);
-  border-color: #d62a2a;
+  border-color: #e02a2a;
 }
 
-.registration .form .form-group .form-group--label-error {
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-
-.registration .form .form-group .error_input {
-  -webkit-transition: background-color 0.2s linear;
-  transition: background-color 0.2s linear;
-  background-color: rgba(214, 42, 42, 0.164);
-  border-color: #d62a2a;
-}
-
-.registration .form .form-group button {
-  font-family: "Segoe UI", sans-serif;
-  font-size: 20px;
+.form .form-group button {
+  font-family: "Tahoma", sans-serif;
+  font-size: 18px;
   font-weight: 400;
   color: white;
   padding: 5px;
@@ -296,28 +276,29 @@ body {
           box-sizing: border-box;
   outline: none;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: #1c324b;
   padding: 0px;
-  border: 1px white;
-  border-bottom-style: solid;
+  padding-left: 10px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0);
+  height: 80px;
+  font-size: 25px;
   border: solid 1px;
   border-radius: 15px;
-  background-color: rgba(255, 255, 255, 0.212);
+  background-color: #2f527a;
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
   cursor: pointer;
   margin: 0;
-  height: 80px;
-  font-size: 25px;
 }
 
 @media (max-width: 450px) {
-  .registration .form .form-group button {
+  .form .form-group button {
     font-size: 16px;
   }
 }
 
-.registration .form .form-group button:disabled {
+.form .form-group button:disabled {
   color: #c2c2c2;
   border: solid 1px;
   border-radius: 15px;
@@ -326,7 +307,7 @@ body {
   cursor: default;
 }
 
-.registration .form .link {
+.form .form-group .link {
   text-align: center;
   color: rgba(255, 255, 255, 0.486);
   text-decoration: none;

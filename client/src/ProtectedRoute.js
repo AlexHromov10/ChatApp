@@ -6,15 +6,3 @@ export const ProtectedRoute = () => {
 
   return token ? <Outlet /> : <Navigate to="/login" />;
 };
-
-// export const ProtectedRoute = ({ element: Element, ...rest }) => {
-//   console.log(...rest, Element);
-//   return (
-//     <Route
-//       {...rest}
-//       element={(props) => {
-//         return <Element />;
-//       }}
-//     />
-//   );
-// };

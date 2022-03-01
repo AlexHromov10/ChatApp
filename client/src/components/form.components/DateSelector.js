@@ -31,7 +31,7 @@ export function DateSelector(props) {
           onClick={(e) => daySelect.onClickSelector(e)}
           name="day"
           id="day"
-          className={daySelect.isDirty && daySelect.selectError ? "error_input" : ""}
+          className={daySelect.isDirty && daySelect.selectError ? "date-select date-select--error" : "date-select"}
         >
           <option value="NONE" defaultValue={"NONE"}>
             День
@@ -43,7 +43,7 @@ export function DateSelector(props) {
           onClick={(e) => monthSelect.onClickSelector(e)}
           name="month"
           id="month"
-          className={monthSelect.isDirty && monthSelect.selectError ? "error_input" : ""}
+          className={monthSelect.isDirty && monthSelect.selectError ? "date-select date-select--error" : "date-select"}
         >
           <option value="NONE" defaultValue={"NONE"}>
             Месяц
@@ -55,7 +55,7 @@ export function DateSelector(props) {
           onClick={(e) => yearSelect.onClickSelector(e)}
           name="year"
           id="year"
-          className={yearSelect.isDirty && yearSelect.selectError ? "error_input" : ""}
+          className={yearSelect.isDirty && yearSelect.selectError ? "date-select date-select--error" : "date-select"}
         >
           <option value="NONE" defaultValue={"NONE"}>
             Год
