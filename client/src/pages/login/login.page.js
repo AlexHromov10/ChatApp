@@ -7,7 +7,7 @@ import { LoginForm } from "./components";
 const LoginPage = () => {
   const { token } = useAuth("");
 
-  return !token ? <LoginForm /> : <Navigate to="/home" />;
+  return !token ? <LoginForm /> : <Navigate to="/chat" />;
   //return <>{!token && <LoginForm />}</>;
 };
 

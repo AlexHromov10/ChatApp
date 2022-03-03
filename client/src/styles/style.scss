@@ -120,6 +120,15 @@ nav {
   margin-bottom: auto;
 }
 
+span {
+  text-align: end;
+  display: inline-flexbox;
+  min-width: 10px;
+  margin: 0;
+  margin-bottom: 3px;
+  color: $error-main-color;
+}
+
 .form {
   background-color: $secondary-bg;
   border-radius: 30px;
@@ -139,14 +148,14 @@ nav {
     width: 90%;
     margin-bottom: 10px;
 
-    span {
-      text-align: end;
-      display: inline-flexbox;
-      min-width: 10px;
-      margin: 0;
-      margin-bottom: 3px;
-      color: $error-main-color;
-    }
+    // span {
+    //   text-align: end;
+    //   display: inline-flexbox;
+    //   min-width: 10px;
+    //   margin: 0;
+    //   margin-bottom: 3px;
+    //   color: $error-main-color;
+    // }
 
     .form-group--label-error {
       flex-direction: row;

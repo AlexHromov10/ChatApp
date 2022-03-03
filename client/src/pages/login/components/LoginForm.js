@@ -8,7 +8,7 @@ import configData from "../../../config.json";
 export function LoginForm(props) {
   const { setToken } = useAuth();
 
-  const [loginError, setLoginError] = useState(false);
+  const [loginError, setLoginError] = useState({ isError: false, message: "" });
 
   const [emailValid, setEmailValid] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
@@ -33,13 +33,13 @@ export function LoginForm(props) {
       });
       const jsonData = await response.json();
       const jwt = response.headers.get("auth-token");
-      console.log(jwt);
+      console.log(jsonData);
 
       if (jsonData.success) {
         setToken(jwt);
-        navigate("/home");
+        navigate("/chat");
       } else {
-        setLoginError(true);
+        setLoginError({ isError: true, message: jsonData.message });
       }
     } catch (error) {
       console.log(error);
@@ -51,7 +51,7 @@ export function LoginForm(props) {
       <form className="form" onSubmit={handleLoginSubmit}>
         <h1>Авторизация</h1>
 
-        {loginError && <span>Неверные данные!</span>}
+        {loginError.isError && <span>{loginError.message}</span>}
 
         <div className="form-group">
           <TextInput

@@ -9,6 +9,7 @@ export function RegistrationForm(props) {
 
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
+    setRegistrationState({ isStarted: true, isFinished: false, success: false, message: { h2: "Ожидайте..." } });
 
     const formData = JSON.stringify({
       email: e.target.email.value,
@@ -27,9 +28,9 @@ export function RegistrationForm(props) {
       });
       const jsonData = await response.json();
       if (jsonData.success) {
-        setRegistrationState({ isFinished: true, success: true, message: { ...jsonData.message } });
+        setRegistrationState({ isStarted: true, isFinished: true, success: true, message: { ...jsonData.message } });
       } else {
-        setRegistrationState({ isFinished: true, success: false, message: { ...jsonData.message } });
+        setRegistrationState({ isStarted: true, isFinished: true, success: false, message: { ...jsonData.message } });
       }
     } catch (error) {
       console.log(error);

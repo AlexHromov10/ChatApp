@@ -45,7 +45,7 @@ const login = async (req, res) => {
       return res.status(403).json({
         success: false,
         errors: `active`,
-        message: `Аккаунт не активирован! Подтвердите аккаунт через почту!`,
+        message: `Аккаунт не активирован!`,
       });
     }
 

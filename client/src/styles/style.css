@@ -94,6 +94,15 @@ nav .navlink p {
   margin-bottom: auto;
 }
 
+span {
+  text-align: end;
+  display: inline-flexbox;
+  min-width: 10px;
+  margin: 0;
+  margin-bottom: 3px;
+  color: #e02a2a;
+}
+
 .form {
   background-color: #2f415f;
   border-radius: 30px;
@@ -124,15 +133,6 @@ nav .navlink p {
           flex-direction: column;
   width: 90%;
   margin-bottom: 10px;
-}
-
-.form .form-group span {
-  text-align: end;
-  display: inline-flexbox;
-  min-width: 10px;
-  margin: 0;
-  margin-bottom: 3px;
-  color: #e02a2a;
 }
 
 .form .form-group .form-group--label-error {

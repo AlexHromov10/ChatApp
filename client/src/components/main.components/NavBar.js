@@ -7,7 +7,8 @@ export function NavBar() {
 
   const handleClick = () => {
     localStorage.removeItem("auth-token");
-    navigate("/home");
+    //alert("LOL");
+    navigate("/login");
   };
 
   return (
@@ -29,9 +30,9 @@ export function NavBar() {
           </Link>
         )}
         {token && (
-          <button className="navlink" onClick={handleClick}>
-            Выйти
-          </button>
+          <a className="navlink" href=" " onClick={handleClick}>
+            <p>Выйти</p>
+          </a>
         )}
       </div>
     </nav>
